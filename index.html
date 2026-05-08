@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Katana Trading · Daily Delivery Sheet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="ti ti-truck"></i></div>
+    <div>
+      <div class="brand-name">Katana Trading</div>
+      <div class="brand-sub">Delivery System</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-page="dashboard">
+      <i class="ti ti-layout-dashboard"></i><span>Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-page="new-sheet">
+      <i class="ti ti-plus"></i><span>Novo Sheet</span>
+    </a>
+    <a href="#" class="nav-item" data-page="history">
+      <i class="ti ti-history"></i><span>Histórico</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-date" id="sidebar-date"></div>
+    <div class="sidebar-loc">Maputo · Mozambique</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Menu">
+      <i class="ti ti-menu-2"></i>
+    </button>
+    <div class="topbar-title" id="topbar-title">Dashboard</div>
+    <div class="topbar-actions" id="topbar-actions"></div>
+  </header>
+
+  <div class="content-wrap">
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="ti ti-check"></i>
+      <span id="toast-msg"></span>
+    </div>
+
+    <!-- PAGE: DASHBOARD -->
+    <section class="page active" id="page-dashboard">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon blue"><i class="ti ti-calendar-stats"></i></div>
+          <div class="metric-body">
+            <div class="metric-label">Sheets este mês</div>
+            <div class="metric-value" id="m-sheets">0</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon navy"><i class="ti ti-building-store"></i></div>
+          <div class="metric-body">
+            <div class="metric-label">Total entregas</div>
+            <div class="metric-value" id="m-total">0</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon green"><i class="ti ti-circle-check"></i></div>
+          <div class="metric-body">
+            <div class="metric-label">Realizadas</div>
+            <div class="metric-value" id="m-done">0</div>
+          </div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon amber"><i class="ti ti-package"></i></div>
+          <div class="metric-body">
+            <div class="metric-label">Caixas entregues</div>
+            <div class="metric-value" id="m-boxes">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title"><i class="ti ti-clock"></i> Sheets recentes</h2>
+          <button class="btn btn-primary" onclick="showPage('new-sheet')">
+            <i class="ti ti-plus"></i> Novo Sheet
+          </button>
+        </div>
+        <div id="recent-list">
+          <div class="empty-state">
+            <i class="ti ti-inbox"></i>
+            <p>Nenhum sheet criado ainda.</p>
+            <button class="btn btn-primary" onclick="showPage('new-sheet')">Criar primeiro sheet</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: NEW SHEET -->
+    <section class="page" id="page-new-sheet">
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title"><i class="ti ti-info-circle"></i> Informações gerais</h2>
+        </div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label>Data</label>
+            <input type="date" id="f-date">
+          </div>
+          <div class="form-group">
+            <label>Motorista / Entregador</label>
+            <input type="text" id="f-driver" placeholder="Nome do motorista">
+          </div>
+          <div class="form-group">
+            <label>Rota</label>
+            <input type="text" id="f-route" placeholder="Ex: Zona Sul">
+          </div>
+          <div class="form-group">
+            <label>Referência</label>
+            <input type="text" id="f-ref" placeholder="Ex: KAT115">
+          </div>
+          <div class="form-group">
+            <label>Veículo / Matrícula</label>
+            <input type="text" id="f-vehicle" placeholder="Ex: MZ-00-00">
+          </div>
+          <div class="form-group">
+            <label>Supervisor</label>
+            <input type="text" id="f-supervisor" placeholder="Nome do supervisor">
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title"><i class="ti ti-map-pin"></i> Entregas realizadas</h2>
+          <button class="btn btn-sm" onclick="addDelRow()"><i class="ti ti-plus"></i> Adicionar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-num">#</th>
+                <th class="col-lg">Cliente</th>
+                <th class="col-lg">Endereço</th>
+                <th class="col-md">Zona</th>
+                <th class="col-sm">Hora</th>
+                <th class="col-md">Estado</th>
+                <th class="col-md">Assinatura</th>
+                <th class="col-action"></th>
+              </tr>
+            </thead>
+            <tbody id="del-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title"><i class="ti ti-box"></i> Produtos entregues</h2>
+          <button class="btn btn-sm" onclick="addProdRow()"><i class="ti ti-plus"></i> Adicionar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-num">#</th>
+                <th class="col-sm">Código</th>
+                <th class="col-xl">Descrição</th>
+                <th class="col-md">Cliente</th>
+                <th class="col-sm">Caixas</th>
+                <th class="col-sm">Unidades</th>
+                <th class="col-md">HS Code</th>
+                <th class="col-action"></th>
+              </tr>
+            </thead>
+            <tbody id="prod-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title"><i class="ti ti-notes"></i> Observações</h2>
+        </div>
+        <div class="form-group">
+          <textarea id="f-obs" rows="4" placeholder="Ocorrências, devoluções, incidentes ou outras notas do dia..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: HISTORY -->
+    <section class="page" id="page-history">
+      <div class="section-card">
+        <div class="section-header">
+          <h2 class="section-title"><i class="ti ti-history"></i> Histórico de sheets</h2>
+        </div>
+        <div class="search-bar">
+          <i class="ti ti-search"></i>
+          <input type="text" id="search-input" placeholder="Pesquisar por data, motorista ou rota..." oninput="renderHistory()">
+        </div>
+        <div id="history-list">
+          <div class="empty-state">
+            <i class="ti ti-inbox"></i>
+            <p>Nenhum sheet encontrado.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE: VIEW -->
+    <section class="page" id="page-view">
+      <div id="view-content"></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- PRINT AREA (hidden, used for printing) -->
+<div id="print-area" class="print-only"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
